@@ -109,3 +109,6 @@ venv.bak/
 .idea/vcs.xml
 .idea/workspace.xml
 .idea/
+
+log/
+data/
