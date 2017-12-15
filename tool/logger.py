@@ -26,7 +26,7 @@ class Logger(object):
 
         # sh: stream handler
         sh = logging.StreamHandler()
-        sh.setLevel(logging.DEBUG)
+        sh.setLevel(logging.INFO)
         sh.setFormatter(lf)
 
         # lp: log file path | ln: log file name | fh： file handler

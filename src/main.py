@@ -1,16 +1,28 @@
 import os
-from tool.prjdir import get_prjdir
-from src.data import pull_data
-from src.data import load_data
-from src.analysis import extract_info
+from tool.prjdir import *
+from src.data import *
+from src.analysis import *
 
-if __name__ == '__main__':
+
+def stage_1():
     url_list = ['https://rajpurkar.github.io/SQuAD-explorer/dataset/train-v1.1.json',
                 'https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v1.1.json']
 
     for url in url_list:
-        pull_data(url, os.path.join(get_prjdir(), 'data'))
+        pull_dataset(url, os.path.join(get_prjdir(), 'data'), url.split('/')[-1])
+        dataset = load_dataset(os.path.join(get_prjdir(), 'data'), url.split('/')[-1])
+        dataset_info = extract_dataset_info(dataset)
 
-    for url in url_list:
-        data = load_data(os.path.join(get_prjdir(), 'data', url.split('/')[-1]))
-        extract_info(data)
+
+def stage_2():
+    pull_l_data('https://rajpurkar.github.io/SQuAD-explorer/', os.path.join(get_prjdir(), 'data'),
+                'algorithm-rank.html', 'algorithm-rank.json')
+    l_data = load_l_data(os.path.join(get_prjdir(), 'data'), 'algorithm-rank.json')
+    l_s_data = extract_given_l_data(l_data, 'single')
+    l_e_data = extract_given_l_data(l_data, 'ensemble')
+    plot_l_data([l_s_data, l_e_data])
+
+
+if __name__ == '__main__':
+    # stage_1()
+    stage_2()
