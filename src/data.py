@@ -10,7 +10,7 @@ data_logger = Logger('data').get_logger()
 
 def decorator(func):
     def wrapper(*args, **kwargs):
-        data_logger.debug('%s: %s' % (func.__name__, ' '.join(args)))
+        data_logger.debug(func.__name__)
         return func(*args, **kwargs)
 
     return wrapper
@@ -26,14 +26,22 @@ def pull_dataset(url, path, file):
         data_logger.info('%s %s %s' % (url.split('/')[-1], 'is not downloaded.', 'Start downloading...'))
         subprocess.call('wget -P %s %s' % (path, url), shell=True)
     else:
-        data_logger.info('%s %s %s' % (url.split('/')[-1], 'is downloaded.', 'Stop downloading...'))
+        data_logger.info('%s %s %s' % (url.split('/')[-1], 'is downloaded.', 'Dont download'))
 
 
 @decorator
 def load_dataset(path, file):
     '''load the dataset from the given path and file'''
-    with open(os.path.join(path, file), 'r') as file:
-        return json.load(file)['data']
+    with open(os.path.join(path, file), 'r') as f:
+        return json.load(f)['data']
+
+
+@decorator
+def save_data(data, path, file):
+    '''save any data in form of json'''
+    with open(os.path.join(path, file), 'w') as f:
+        json.dump(data, f)
+    data_logger.info('save data into %s' % os.path.join(path, file))
 
 
 @decorator
@@ -48,7 +56,7 @@ def pull_l_data(url, path, file_s, file_d):
         with open(os.path.join(path, file_s), 'w') as f:
             f.write(data.text)
     else:
-        data_logger.info('%s %s %s' % (file_s, 'is downloaded.', 'Stop downloading...'))
+        data_logger.info('%s %s %s' % (file_s, 'is downloaded.', 'Dont download'))
     with open(os.path.join(path, file_s), 'r') as f:
         data = f.read()
         s = BeautifulSoup(data, 'html.parser')
@@ -74,5 +82,5 @@ def pull_l_data(url, path, file_s, file_d):
 @decorator
 def load_l_data(path, file):
     '''load the leaderborad data from the given path and file'''
-    with open(os.path.join(path, file), 'r') as file:
-        return json.load(file)
+    with open(os.path.join(path, file), 'r') as f:
+        return json.load(f)

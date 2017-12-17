@@ -20,13 +20,13 @@ def decorator(func):
 @decorator
 def plot_l_data(data):
     '''plot leaderboard data'''
-    plt.figure(figsize=(10, 8))
+    plt.figure(figsize=(20, 8))
     bar_width = 0.55
     name_list = ['single', 'ensemble']
 
-    for i in range(len(data)):
+    for i, item in enumerate(data):
         xaxis, xlabel, yaxis_1, yaxis_2 = [], [], [], []
-        data_slice = data[i][0:5]
+        data_slice = item[0:10]
         xaxis = np.arange(len(data_slice) * 2)[::2]
         for item in data_slice:
             xlabel.append(strip_xlabel(item['model']))
